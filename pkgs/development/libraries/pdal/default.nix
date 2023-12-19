@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, testers
 
 , enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
 
@@ -112,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     pdal = callPackage ./tests.nix { pdal = finalAttrs.finalPackage; };
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
@@ -120,5 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = teams.geospatial.members;
     platforms = platforms.all;
+    pkgConfigModules = [ "pdal" ];
   };
 })
